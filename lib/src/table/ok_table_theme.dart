@@ -6,8 +6,18 @@ import 'package:flutter/material.dart';
 ///
 /// {@endtemplate}
 class OKTableTheme extends InheritedWidget {
+  /// The dark theme.
+  ///
+  /// When [ThemeData.brightness] is [Brightness.dark]
+  ///
   /// {@macro flutter_ok_widget.ok_table_theme_data}
   final OKTableThemeData dark;
+
+  /// The light theme.
+  ///
+  /// When [ThemeData.brightness] is [Brightness.light]
+  ///
+  /// {@macro flutter_ok_widget.ok_table_theme_data}
   final OKTableThemeData light;
 
   /// {@macro flutter_ok_widget.ok_table_theme}
@@ -38,8 +48,6 @@ class OKTableTheme extends InheritedWidget {
     }
     return theme.light;
   }
-
-  static const defaultTheme = OKTableThemeData.defaultTheme;
 }
 
 /// {@template flutter_ok_widget.ok_table_theme_data}
@@ -87,6 +95,11 @@ class OKTableThemeData {
     ),
   );
 
+  /// {@template flutter_ok_widget.copy_with}
+  ///
+  /// Creates a copy of this theme but with the given fields replaced with the new values.
+  ///
+  /// {@endtemplate}
   OKTableThemeData copyWith({
     TextStyle? titleStyle,
     TextStyle? bodyStyle,
@@ -97,6 +110,11 @@ class OKTableThemeData {
     );
   }
 
+  /// {@template flutter_ok_widget.fallback}
+  ///
+  /// The fallback theme.
+  ///
+  /// {@endtemplate}
   static OKTableThemeData fallback({required Brightness brightness}) {
     switch (brightness) {
       case Brightness.dark:
