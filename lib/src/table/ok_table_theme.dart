@@ -37,6 +37,7 @@ class OKTableTheme extends InheritedWidget {
     return false;
   }
 
+  /// From [context] get [OKTableThemeData].
   static OKTableThemeData of(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     final theme = context.dependOnInheritedWidgetOfExactType<OKTableTheme>();
