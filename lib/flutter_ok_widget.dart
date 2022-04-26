@@ -2,6 +2,10 @@
 // Date: 2022-04-26
 
 /// List of all widgets:
+/// - [OKTableTheme]
+/// - [TableMixin]
 /// - [TapWrapper]
 import 'flutter_ok_widget.dart';
+export 'src/table/ok_table_theme.dart';
+export 'src/table/ok_table_mixin.dart';
 export 'src/tap_wrapper.dart';
