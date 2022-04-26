@@ -25,7 +25,7 @@ void main(List<String> args) {
     print('No widget name is provided.');
   } finally {
     makeIndexDartFile(dir);
-    // formatDartFile(dir);
+    formatDartFile(dir);
   }
 }
 
@@ -77,12 +77,11 @@ void makeIndexDartFile(Directory dir) {
       .toList();
 
   final widgetTableMarkdown = '''
-| Widget |
-| ------ |
-${widgetList.map((e) => '| $e |').join('\n')}
+${widgetList.map((e) => '[$e]').join('\n')}
 '''
+      .trim()
       .split('\n')
-      .map((e) => '/// $e')
+      .map((e) => '/// - $e')
       .toList()
       .join('\n');
 
@@ -91,8 +90,17 @@ ${widgetList.map((e) => '| $e |').join('\n')}
 // Date: ${DateFormat('yyyy-MM-dd').format(DateTime.now())}
 ''';
 
-  indexFile.writeAsStringSync(
-      '$indexHeader\n\n$widgetTableMarkdown${exportList.join('\n')}');
+  final StringBuffer sb = StringBuffer();
+  sb.writeln(indexHeader);
+  sb.writeln();
+  sb.writeln('/// List of all widgets:');
+  sb.writeln(widgetTableMarkdown);
+  // sb.writeln('library flutter_ok_widget;');
+  // sb.writeln();
+  sb.writeln("import 'flutter_ok_widget.dart';");
+  sb.writeln(exportList.join('\n'));
+
+  indexFile.writeAsStringSync(sb.toString());
 }
 
 /// 将文件名转为大驼峰格式

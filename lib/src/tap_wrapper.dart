@@ -8,10 +8,20 @@ import 'package:flutter/material.dart';
 ///
 /// {@endtemplate}
 class TapWrapper extends StatelessWidget {
+  /// [onTap] will be called when the widget is tapped.
   final VoidCallback onTap;
+
+  /// [child] is the widget to wrap.
   final Widget child;
+
+  /// [color] is the color of the [Material].
   final Color color;
+
+  /// Wrapper [Padding] around [child].
   final EdgeInsets? padding;
+
+  /// The [Material.elevation].
+  final double elevation;
 
   /// {@macro flutter_ok_widget.tap_wrapper}
   const TapWrapper({
@@ -20,6 +30,7 @@ class TapWrapper extends StatelessWidget {
     required this.onTap,
     required this.child,
     this.padding,
+    this.elevation = 0,
   }) : super(key: key);
 
   @override
@@ -32,7 +43,7 @@ class TapWrapper extends StatelessWidget {
 
     return Material(
       color: color,
-      elevation: 0,
+      elevation: elevation,
       child: InkWell(
         onTap: onTap,
         child: w,
