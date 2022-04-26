@@ -9,21 +9,39 @@ import 'package:flutter_ok_widget/flutter_ok_widget.dart';
 ///
 /// Use [buildTable] to build the table.
 ///
+/// See the [example][] for more details.
+///
+/// [example]: https://gitee.com/kikt/flutter_ok_widget/blob/master/example/lib/table_mixin_example.dart
+///
 /// {@endtemplate}
 mixin TableMixin<T> {
+  /// {@macro flutter_ok_widget.createWeightList}
   List<int> get weightList => createWeightList();
 
+  /// {@template flutter_ok_widget.createWeightList}
+  ///
+  /// Create a list of weights.
+  ///
+  /// {@endtemplate}
   List<int> createWeightList();
 
+  /// The header of the table.
   List<InlineSpan> createTableTitleList();
 
+  /// The content of the table row.
   List<InlineSpan> buildContentTextList(T item);
 
+  /// If your table is need pull down refresh,
+  /// just implement this method.
+  ///
+  /// The content will be warp by [RefreshIndicator].
   RefreshCallback? onRefreshTable;
 
-  OKTableThemeData tableTheme(BuildContext context) =>
-      OKTableTheme.of(context)?.data ?? OKTableTheme.defaultTheme;
+  /// The table theme.
+  OKTableThemeData _tableTheme(BuildContext context) =>
+      OKTableTheme.of(context);
 
+  /// Wrapper every table title cell and content cell.
   Widget wrapperText(
     BuildContext context,
     InlineSpan textSpan, {
@@ -40,12 +58,15 @@ mixin TableMixin<T> {
     );
   }
 
+  /// The text style of the table title.
   TextStyle tableTitleTextStyle(BuildContext context) =>
-      tableTheme(context).titleStyle;
+      _tableTheme(context).titleStyle;
 
+  /// The text style of the table content.
   TextStyle tableBodyTextStyle(BuildContext context) =>
-      tableTheme(context).bodyStyle;
+      _tableTheme(context).bodyStyle;
 
+  /// Build every table title row.
   Widget _buildTitleRow(BuildContext context) {
     final List<InlineSpan> titleList = createTableTitleList();
     return Row(
@@ -63,6 +84,7 @@ mixin TableMixin<T> {
     );
   }
 
+  /// Build every table content row.
   Widget buildTableRow(BuildContext context, T item) {
     final textList = buildContentTextList(item);
     return Row(
@@ -80,6 +102,7 @@ mixin TableMixin<T> {
     );
   }
 
+  /// Build the table.
   Widget buildTable(BuildContext context, List<T> list) {
     // 使用 Column，ListView，构建表格
     Widget listView = ListView.builder(
