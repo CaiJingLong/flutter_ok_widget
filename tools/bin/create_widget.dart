@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
+import 'package:tools/template_utils.dart';
 
 void main(List<String> args) {
   final widgetDir = '..';
@@ -16,36 +17,76 @@ void main(List<String> args) {
     targetFile.createSync(recursive: true);
 
     // 2. 写入文件内容，读取模板文件
-    final templateFile = File('template/src.dart.tmpl');
-    final src = templateFile.readAsStringSync();
+    final templateSrc = readTemplateSrc('src');
     final className = convertClassName(pathName);
-    final content = convertContent(src, className);
+    final content = convertContent(templateSrc, className);
     targetFile.writeAsStringSync(content);
   } catch (e) {
     print('No widget name is provided.');
   } finally {
     makeIndexDartFile(dir);
+    makeExampleDartFile(dir);
     formatDartFile(dir);
   }
 }
 
+String readTemplateSrc(String templateName) {
+  final templateFile = File('template/$templateName.dart.tmpl');
+  return templateFile.readAsStringSync();
+}
+
+void makeExampleDartFile(Directory dir) {
+  final template = readTemplateSrc('examples');
+  final exampleDir = Directory('${dir.absolute.path}/example/lib');
+  final dartFiles = exampleDir
+      .listSync()
+      .whereType<File>()
+      .where((element) => element.path.endsWith('_example.dart'))
+      .toList();
+
+  dartFiles.sort((a, b) => a.path.compareTo(b.path));
+
+  final imports = dartFiles.map((file) {
+    final path = relative(file.path, from: exampleDir.absolute.path);
+    return "import '$path';";
+  }).toList();
+
+  final instances = dartFiles.map((file) {
+    final path = relative(file.path, from: exampleDir.absolute.path);
+    var fileName = basename(path);
+    final className = convertClassName(
+        fileName.substring(0, fileName.length - '.dart'.length));
+    return "  $className(),";
+  }).toList();
+
+  final content = convertTemplate(template, {
+    'imports': imports.join('\n'),
+    'Widgets': instances.join('\n'),
+  });
+
+  final outputFile = File('${dir.absolute.path}/example/lib/examples.dart');
+  outputFile.writeAsStringSync(content);
+}
+
 void formatDartFile(Directory dir) {
-  final formatPath = '${dir.absolute.path}/lib';
+  final needFormatList = [
+    '${dir.absolute.path}/lib',
+    '${dir.absolute.path}/example/lib',
+  ];
   final shellCommand = 'flutter';
-  final process = Process.runSync(shellCommand, ['format', formatPath]);
+  final process = Process.runSync(
+    shellCommand,
+    [
+      'format',
+      ...needFormatList,
+    ],
+  );
   print('${process.stdout}');
   print('${process.stderr}');
 }
 
-String _convertTemplate(String src, Map<String, String> map) {
-  for (final key in map.entries) {
-    src = src.replaceAll('%${key.key}%', key.value);
-  }
-  return src;
-}
-
 String convertContent(String src, String className) {
-  return _convertTemplate(src, {
+  return convertTemplate(src, {
     'Name': className,
     'Date': DateFormat('yyyy-MM-dd').format(DateTime.now()),
   });

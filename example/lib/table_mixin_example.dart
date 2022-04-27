@@ -54,9 +54,33 @@ class TableMixinExample extends StatefulWidget {
 
 class _TableMixinExampleState extends State<TableMixinExample>
     with OKTableMixin<ProgrammingLanguage> {
+  final list = <ProgrammingLanguage>[
+    ...languageList,
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return buildTable(context, languageList);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Table Mixin Example'),
+      ),
+      body: buildTable(context, languageList),
+    );
+  }
+
+  @override
+  RefreshCallback? get onRefreshTable {
+    return () async {
+      const newInstance = ProgrammingLanguage(
+        url: 'unknown',
+        name: 'unknown',
+      );
+
+      await Future.delayed(const Duration(seconds: 1));
+      setState(() {
+        list.insert(0, newInstance);
+      });
+    };
   }
 
   @override
@@ -85,6 +109,6 @@ class _TableMixinExampleState extends State<TableMixinExample>
 
   @override
   List<int> createWeightList() {
-    return [1, 1];
+    return [1, 3];
   }
 }
