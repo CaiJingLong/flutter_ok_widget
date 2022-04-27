@@ -53,7 +53,7 @@ class TableMixinExample extends StatefulWidget {
 }
 
 class _TableMixinExampleState extends State<TableMixinExample>
-    with TableMixin<ProgrammingLanguage> {
+    with OKTableMixin<ProgrammingLanguage> {
   @override
   Widget build(BuildContext context) {
     return buildTable(context, languageList);

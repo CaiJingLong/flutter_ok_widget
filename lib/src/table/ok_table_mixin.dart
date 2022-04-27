@@ -14,7 +14,7 @@ import 'package:flutter_ok_widget/flutter_ok_widget.dart';
 /// [example]: https://gitee.com/kikt/flutter_ok_widget/blob/master/example/lib/table_mixin_example.dart
 ///
 /// {@endtemplate}
-mixin TableMixin<T> {
+mixin OKTableMixin<T> {
   /// {@macro flutter_ok_widget.createWeightList}
   List<int> get weightList => createWeightList();
 
