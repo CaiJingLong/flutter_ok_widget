@@ -22,4 +22,6 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: stable
-      - run: ./check.sh
+      - run: cd lib && flutter pub get && flutter analyze
+      - run: cd example && flutter pub get && flutter analyze
+      - run: cd tools && flutter pub get && flutter analyze

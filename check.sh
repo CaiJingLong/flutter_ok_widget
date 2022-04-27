@@ -1,4 +1,5 @@
 WORK_DIR=$(pwd)
+set +e
 
 function check_target_dir() {
   if [ ! -d "$1" ]; then
@@ -7,6 +8,7 @@ function check_target_dir() {
   fi
   cd "$WORK_DIR/$1/lib"
   echo "Checking target directory: ${PWD}"
+  flutter pub get
   flutter analyze
   cd "$WORK_DIR"
 }
